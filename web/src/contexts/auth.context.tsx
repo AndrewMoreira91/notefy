@@ -75,11 +75,8 @@ function AuthProvider({ children }: { children: ReactNode }) {
 				}
 				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			} catch (error: any) {
-				console.log(error);
-				const errorMessage = errorHandler(error);
-				console.log(errorMessage);
+				console.error(error);
 				setIsError(true);
-				setErroMessage(errorMessage);
 			}
 		}
 		loadStorageData();
@@ -148,8 +145,6 @@ function AuthProvider({ children }: { children: ReactNode }) {
 
 		setUser(null);
 	}
-
-	console.log(`User: ${user}`);
 
 	return (
 		<authContext.Provider value={{

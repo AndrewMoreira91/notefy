@@ -77,16 +77,12 @@ export const Dashboard = () => {
     data: categories,
     isError: isErrorInCategories,
     isLoading: isLoadingCategories,
-    error
   } = useQuery({
     queryKey: ["categories"], queryFn: async () => {
-      console.log(user?.id);
       const { data: categories } = await api.get<CategoryType[]>(`/get-categories/${user?.id}`);
       return categories;
     }
   })
-
-  console.error(error);
 
   return (
     <div className="dashboard-container">

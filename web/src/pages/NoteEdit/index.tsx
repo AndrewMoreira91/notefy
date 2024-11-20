@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import "./style.css"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
@@ -41,7 +43,7 @@ export default function NoteEdit() {
 		try {
 			await api.put(`/update-note/${id}`, { title, content, categoryId })
 		} catch (error) {
-			console.log(error)
+			// console.error(error)
 		}
 	}
 
