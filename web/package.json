@@ -1,8 +1,13 @@
 {
-  "name": "web",
+  "name": "notefy",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "author": {
+    "name": "Andrew Moreira",
+    "email": "andrewsantos@gmail.com",
+    "url": "https://www.linkedin.com/in/andrew-moreira-998538165/"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
