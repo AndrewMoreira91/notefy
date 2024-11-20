@@ -1,0 +1,726 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "Api Notefy",
+		"description": "Uma api para gerenciar suas notas",
+		"contact": {
+			"name": "Notefy",
+			"email": "andrewsantos9113@gmail.com"
+		},
+		"version": "1.0.0"
+	},
+	"servers": [
+		{
+			"url": "http://localhost:3333",
+			"description": "Local server"
+		},
+		{
+			"url": "https://notefy-api-nwxp.onrender.com",
+			"description": "Production server"
+		}
+	],
+	"paths": {
+		"/create-user": {
+			"post": {
+				"summary": "Cria um novo usuário",
+				"description": "Essa rota cria um novo usuário, e retorna o objeto usúario junto com um token de autenticação",
+				"tags": [
+					"User"
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/User"
+							},
+							"examples": {
+								"Andrew": {
+									"value": {
+										"name": "Andrew",
+										"email": "andrew@gmail.com",
+										"password": "123456"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Usuário criado com sucesso",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"token": {
+											"type": "string"
+										},
+										"user": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												},
+												"email": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Erro ao criar usuário"
+					}
+				}
+			}
+		},
+		"/login": {
+			"post": {
+				"summary": "Faz login na aplicação",
+				"description": "Essa rota faz login na aplicação, e retorna um token de autenticação que deve ser usado nas rotas protegidas",
+				"tags": [
+					"User"
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"email": {
+										"type": "string"
+									},
+									"password": {
+										"type": "string"
+									}
+								}
+							},
+							"examples": {
+								"Andrew": {
+									"value": {
+										"email": "andrew@gmail.com",
+										"password": "123456"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Usuário logado com sucesso",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"token": {
+											"type": "string"
+										},
+										"refreshToken": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "string"
+												},
+												"expiresIn": {
+													"type": "string"
+												},
+												"userId": {
+													"type": "string"
+												}
+											}
+										},
+										"user": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												},
+												"email": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Erro ao fazer login"
+					}
+				}
+			}
+		},
+		"/create-note/{userId}": {
+			"post": {
+				"summary": "Cria uma nova nota",
+				"description": "Essa rota cria uma nova nota, e retorna o objeto nota. Essa rota é protegida, então é necessário passar o token de autenticação",
+				"tags": [
+					"Note"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Note"
+							},
+							"examples": {
+								"Andrew": {
+									"value": {
+										"title": "Nota 1",
+										"content": "Descrição da nota 1"
+									}
+								}
+							}
+						}
+					}
+				},
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"description": "Id do usuário",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "Nota criada com sucesso",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Note"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Erro ao criar nota"
+					}
+				}
+			}
+		},
+		"/create-note-and-category/{userId}": {
+			"post": {
+				"summary": "Cria uma nova nota e uma nova categoria",
+				"description": "Essa rota cria uma nova nota e uma nova categoria, e retorna o objeto nota e categoria. Essa rota é protegida, então é necessário passar o token de autenticação",
+				"tags": [
+					"Note"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"content": {
+										"type": "string"
+									},
+									"categoryName": {
+										"type": "string"
+									}
+								}
+							},
+							"examples": {
+								"Andrew": {
+									"value": {
+										"title": "Nota 1",
+										"content": "Descrição da nota 1",
+										"categoryName": "Categoria 1"
+									}
+								}
+							}
+						}
+					}
+				},
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"description": "Id do usuário",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "Nota e categoria criadas com sucesso",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Note"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Erro ao criar nota e categoria"
+					}
+				}
+			}
+		},
+		"/get-notes/{userId}": {
+			"get": {
+				"summary": "Pega todas as notas de um usuário",
+				"description": "Essa rota pega todas as notas de um usuário. Essa rota é protegida, então é necessário passar o token de autenticação",
+				"tags": [
+					"Note"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"description": "Id do usuário",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Notas encontradas",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Note"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Erro ao encontrar notas"
+					}
+				}
+			}
+		},
+		"/get-note/{id}": {
+			"get": {
+				"summary": "Pega uma nota",
+				"description": "Essa rota pega uma nota pelo id",
+				"tags": [
+					"Note"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Id da nota",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Nota encontrada",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Note"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Erro ao encontrar nota"
+					}
+				}
+			}
+		},
+		"/get-notes-by-categories/{userId}": {
+			"get": {
+				"tags": [
+					"Note"
+				],
+				"summary": "Pega todas as notas de um usuário por categoria",
+				"description": "Essa rota pega todas as notas de um usuário e agrupa por categorias. Essa rota é protegida, então é necessário passar o token de autenticação",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"description": "Id do usuário",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Notas encontradas",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"categoryId": {
+												"type": "string"
+											},
+											"categoryName": {
+												"type": "string"
+											},
+											"notes": {
+												"type": "array",
+												"items": {
+													"$ref": "#/components/schemas/Note"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Erro ao encontrar notas"
+					}
+				}
+			}
+		},
+		"/delete-note/{id}": {
+			"delete": {
+				"tags": [
+					"Note"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Id da nota",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Nota deletada com sucesso"
+					},
+					"400": {
+						"description": "Erro ao deletar nota"
+					}
+				}
+			}
+		},
+		"/create-category/{userId}": {
+			"post": {
+				"description": "Cria uma nova categoria",
+				"tags": [
+					"Category"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									}
+								}
+							},
+							"examples": {
+								"Andrew": {
+									"value": {
+										"name": "Categoria 1"
+									}
+								}
+							}
+						}
+					}
+				},
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"description": "Id do usuário",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "Categoria criada com sucesso",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Category"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Erro ao criar categoria"
+					}
+				}
+			}
+		},
+		"/delete-category/{id}": {
+			"delete": {
+				"tags": [
+					"Category"
+				],
+				"summary": "Deleta uma categoria",
+				"description": "Essa rota deleta uma categoria. Essa rota é protegida, então é necessário passar o token de autenticação",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Id da categoria",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Categoria deletada com sucesso"
+					},
+					"400": {
+						"description": "Erro ao deletar categoria"
+					}
+				}
+			}
+		},
+		"/get-categories/{userId}": {
+			"get": {
+				"tags": [
+					"Category"
+				],
+				"summary": "Pega todas as categorias de um usuário",
+				"description": "Essa rota pega todas as categorias de um usuário. Essa rota é protegida, então é necessário passar o token de autenticação",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"description": "Id do usuário",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Categorias encontradas",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Category"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Erro ao encontrar categorias"
+					}
+				}
+			}
+		},
+		"/update-note/{id}": {
+			"put": {
+				"tags": [
+					"Note"
+				],
+				"summary": "Atualiza uma nota",
+				"description": "Essa rota atualiza uma nota. Essa rota é protegida, então é necessário passar o token de autenticação",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Id da nota",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"content": {
+										"type": "string"
+									}
+								}
+							},
+							"examples": {
+								"Andrew": {
+									"value": {
+										"title": "Nota 1",
+										"content": "Descrição da nota 1"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"204": {
+						"description": "Nota atualizada com sucesso"
+					},
+					"400": {
+						"description": "Erro ao atualizar nota"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"User": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				}
+			},
+			"Note": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"category": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			},
+			"Category": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"securitySchemes": {
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT",
+				"description": "JWT token"
+			}
+		}
+	}
+}

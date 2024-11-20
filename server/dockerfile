@@ -1,0 +1,9 @@
+FROM node
+WORKDIR /code
+COPY . .
+ENV PORT=3333
+ARG PORT=${PORT}
+EXPOSE ${PORT}
+RUN npm install
+RUN npx prisma generate
+CMD npx prisma migrate dev --name init && npm run dev

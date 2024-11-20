@@ -1,0 +1,23 @@
+.category-item {
+	border: 1px solid var(--blue);
+	border-radius: 10px;
+	padding: 2px 8px;
+	font-size: 1rem;
+	color: var(--blue);
+	transition: 0.2s ease;
+}
+
+.category-item:hover {
+	color: var(--blue-hover);
+	border-color: var(--blue-hover);
+}
+
+.selected {
+	color: var(--white);
+	background-color: var(--blue);
+}
+
+.selected:hover {
+	color: var(--white);
+	background-color: var(--blue-hover);
+}

@@ -1,0 +1,48 @@
+.dashboard-container {
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
+	margin: 5rem;
+}
+
+main h1 {
+	font-size: 2.5rem;
+	margin-bottom: 2rem;
+	font-weight: 700;
+}
+
+.categories-header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 1rem;
+	gap: 2px
+}
+
+.categories {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+.container-cads {
+	margin: 2rem 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+	grid-gap: 2rem;
+}
+
+@media (max-width: 768px) {
+	main {
+		margin: 1rem;
+	}
+
+	.container-cads {
+		align-items: center;
+		justify-content: center;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	}
+}
