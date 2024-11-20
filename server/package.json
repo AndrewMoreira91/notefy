@@ -11,7 +11,7 @@
 		"lint": "tsx lint",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "tsup src",
-		"start": "prisma migrate deploy && node ./dist/server.js"
+		"start": "node ./dist/server.js"
 	},
 	"keywords": [],
 	"author": "Andrew andrewsantos9113@gmail.com",

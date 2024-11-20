@@ -9,16 +9,6 @@
 		},
 		"version": "1.0.0"
 	},
-	"servers": [
-		{
-			"url": "http://localhost:3333",
-			"description": "Local server"
-		},
-		{
-			"url": "https://notefy-api-1ujt.onrender.com",
-			"description": "Production server"
-		}
-	],
 	"paths": {
 		"/create-user": {
 			"post": {
@@ -338,6 +328,11 @@
 				"description": "Essa rota pega uma nota pelo id",
 				"tags": [
 					"Note"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
 				],
 				"parameters": [
 					{

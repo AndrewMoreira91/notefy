@@ -2,7 +2,7 @@ services:
   api:
     build: .
     ports:
-      - "3000:3000"
+      - "3333:3333"
     environment:
       - DATABASE_URL=postgres://postgres:postgres@localhost:5432/notefy
     develop:
