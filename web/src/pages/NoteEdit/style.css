@@ -184,11 +184,15 @@
 	text-decoration: none;
 	background-color: var(--color-background);
 	resize: none;
+	scrollbar-width: none;
 }
 
 
 @media (max-width: 768px) {
 	.btn-add-category span {
 		display: none;
+	}
+	.content-note-input {
+		font-size: 1.2rem;
 	}
 }

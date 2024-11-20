@@ -123,7 +123,7 @@ export const Dashboard = () => {
         </div>
 
         {isLoading && <Loading />}
-        {isError && <h3>Erro ao carregar as notas</h3>}
+        {isError && <h3>Erro ao carregar as notas, tente recarregar a página</h3>}
         <div className="container-cads">
           {notes && notes.length === 0 ? <h3>Você não tem nenhuma nota :(</h3>
             : (search === "" ? noteList : listSearch)?.map(note => {

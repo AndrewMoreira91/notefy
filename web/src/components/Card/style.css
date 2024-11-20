@@ -117,10 +117,11 @@
 	background-color: #1F1F1F;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 	z-index: 1;
-	left: 10px;
+	right: 0px;
 	top: 30px;
 	border-radius: 4px;
 	overflow: hidden;
+	font-size: 1rem;
 
 	text-align: start;
 	pointer-events: visiblePainted;
@@ -143,4 +144,10 @@
 
 .btn-dropdown-container:hover .dropdown-content {
 	display: block;
+}
+
+@media (max-width: 768px) {
+	.dropdown-content {
+		font-size: 1.2rem;
+	}
 }
