@@ -1,4 +1,15 @@
 services:
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=notefy
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    container_name: notefy-postgres
+    network_mode: host
+
   api:
     build: .
     ports:
@@ -14,18 +25,3 @@ services:
     network_mode: host
     depends_on:
       - postgres
-
-  postgres:
-    image: postgres
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_DB=notefy
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    container_name: notefy-postgres
-    network_mode: host
-
-networks:
-  notefy-networks:
-    driver: bridge

@@ -33,6 +33,7 @@ body, html {
   min-width: 320px;
   min-height: 100vh;
   height: 100vh;
+  background-color: var(--dark-900);
 }
 
 #root {
