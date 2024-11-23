@@ -10,6 +10,7 @@
 	background-color: var(--dark-800);
 	max-width: 500px;
 	height: 275px;
+	font-size: 14px;
 	/* overflow: hidden; */
 	/* text-overflow: ellipsis; */
 }
@@ -24,6 +25,11 @@
 	gap: 0.5rem;
 }
 
+.header-card h2 {
+	font-size: 1.6rem;
+	font-weight: 700;
+}
+
 .header-card span {
 	font-size: 0.8rem;
 	font-weight: 400;
@@ -34,6 +40,8 @@
 	flex-direction: column;
 	justify-content: space-between;
 	overflow: auto;
+	margin-top: 16px;
+	border-top: 1px solid #414141;
 }
 
 .content-card::-webkit-scrollbar {
@@ -46,11 +54,9 @@
 	border-radius: 5px;
 }
 
-.card p {
+.content-card p {
 	width: 100%;
-	height: 100%;
-	font-size: 1rem;
-	margin-top: 0.7rem;
+	/* font-size: 0.9rem; */
 	text-align: left;
 }
 

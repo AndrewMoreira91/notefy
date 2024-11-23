@@ -1,8 +1,11 @@
 import Routes from "./routes";
+import { PrimeReactProvider } from 'primereact/api';
 
 function App() {
   return (
-    <Routes  />
+    <PrimeReactProvider value={{unstyled: true}}>
+      <Routes />
+    </PrimeReactProvider>
   )
 }
 

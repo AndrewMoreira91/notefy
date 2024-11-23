@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
 import "./style.css"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import TextareaAutosize from 'react-textarea-autosize';
 import { BiEdit, BiSolidCategory } from "react-icons/bi";
 import { BsFillClockFill } from "react-icons/bs";
 import { PiPlus } from "react-icons/pi";
@@ -18,13 +16,15 @@ import { FaCheck, FaRegTrashAlt } from "react-icons/fa";
 
 type UpdateNoteData = {
 	title?: string;
-	content?: string;
+	content?: string | null;
 	categoryId?: string;
 }
 
+import { Editor } from "primereact/editor";
+
 export default function NoteEdit() {
 	const [title, setTitle] = useState<string | null>(null)
-	const [content, setContent] = useState("")
+	const [content, setContent] = useState<string>("")
 	const [note, setNote] = useState<NoteType | null>(null)
 	const [categories, setCategories] = useState<CategoryType[]>([])
 	const [categorySelected, setCategorySelected] = useState<CategoryType | null>(null)
@@ -41,7 +41,12 @@ export default function NoteEdit() {
 
 	async function updateNote({ title, content, categoryId }: UpdateNoteData) {
 		try {
-			await api.put(`/update-note/${id}`, { title, content, categoryId })
+			let data = {}
+			if (title) data = { ...data, title }
+			if (content) data = { ...data, content }
+			if (categoryId) data = { ...data, categoryId }
+
+			await api.put(`/update-note/${id}`, data)
 		} catch (error) {
 			// console.error(error)
 		}
@@ -239,15 +244,18 @@ export default function NoteEdit() {
 							</div>
 						</div>
 
-						<TextareaAutosize
-							className="content-note-input"
-							placeholder="Digite sua nota aqui..."
-							value={content}
-							onChange={(e) => {
-								setContent(e.target.value)
-								updateNote({ content: e.target.value })
-							}}
-						/>
+						<div className="content-note-edit">
+							<Editor
+								className="editor"
+								value={content}
+								onTextChange={(e) => {
+									if (e.htmlValue) {
+										setContent(e.htmlValue)
+										updateNote({ content: e.htmlValue })
+									}
+								}}
+							/>
+						</div>
 					</form>
 				</main>
 			)}

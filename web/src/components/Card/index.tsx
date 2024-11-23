@@ -3,7 +3,7 @@ import { HiDotsVertical } from "react-icons/hi";
 import { FaEraser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
-import TextareaAutosize from 'react-textarea-autosize';
+import ReactHtmlParser from "react-html-parser"
 
 type CardProps = {
 	title: string;
@@ -21,26 +21,25 @@ export default function Card({
 	onDeleteClick
 }: CardProps) {
 
+	const contentParsed = ReactHtmlParser(content)
+
 	return (
 		<div className="card">
-			<div className="content-card">
-				<div className="header-card">
-					<h2>{title}</h2>
-					<span>Criado em:{"  "}
-						<strong>
-							{`${new Date(dateCreated).toLocaleDateString()} `}
-						</strong>
-						ás
-						<strong>
-							{` ${new Date(dateCreated).toLocaleTimeString()}`}
-						</strong>
-					</span>
-				</div>
+			<div className="header-card">
+				<h2>{title}</h2>
+				<span>Criado em:{"  "}
+					<strong>
+						{`${new Date(dateCreated).toLocaleDateString()} `}
+					</strong>
+					ás
+					<strong>
+						{` ${new Date(dateCreated).toLocaleTimeString()}`}
+					</strong>
+				</span>
+			</div>
 
-				<TextareaAutosize
-					className="content-textarea-card"
-					value={content}
-				/>
+			<div className="content-card">
+				{contentParsed}
 			</div>
 
 			<div className="line-footer-card" />

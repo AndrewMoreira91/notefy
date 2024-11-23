@@ -92,7 +92,7 @@ export const Dashboard = () => {
         isShowBtnBack={false}
       />
       <main>
-        <h1>Suas Notas</h1>
+        <h1 className="title-main">Suas Notas</h1>
 
         <div>
           <div className="categories-header">

@@ -1,5 +1,6 @@
 .note-edit-container {
 	height: 100%;
+	margin-bottom: 1rem;
 }
 
 .title-note-input {
@@ -176,6 +177,25 @@
 	background-color: #474747;
 }
 
+.content-note-edit {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.editor {
+	width: 80%;
+	height: 100%;
+	background-color: #eaeaea;
+	color: #000000;
+	border: none;
+	outline: none;
+	border-radius: 18px;
+	overflow: hidden;
+	height: 100%;
+	min-height: 300px;
+}
+
 .content-note-input {
 	width: 60%;
 	min-width: 300px;
@@ -194,5 +214,8 @@
 	}
 	.content-note-input {
 		font-size: 1.2rem;
+	}
+	.editor {
+		width: 100%;
 	}
 }
