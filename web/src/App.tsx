@@ -3,7 +3,7 @@ import { PrimeReactProvider } from 'primereact/api';
 
 function App() {
   return (
-    <PrimeReactProvider value={{unstyled: true}}>
+    <PrimeReactProvider>
       <Routes />
     </PrimeReactProvider>
   )

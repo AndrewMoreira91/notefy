@@ -76,6 +76,7 @@
 	max-height: 80vh;
 	font-size: 0.9rem;
 	min-width: 170px;
+	z-index: 100;
 }
 
 .container-category-list .input-container-dropdown {

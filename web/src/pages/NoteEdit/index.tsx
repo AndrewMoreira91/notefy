@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import "./style.css"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { BiEdit, BiSolidCategory } from "react-icons/bi";
 import { BsFillClockFill } from "react-icons/bs";
@@ -14,6 +14,7 @@ import { useAuth } from "../../contexts/auth.context";
 import Header from "../../components/Header"
 import Loading from "../../components/Loading";
 import { FaCheck, FaRegTrashAlt } from "react-icons/fa";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type UpdateNoteData = {
 	title?: string;
@@ -21,23 +22,22 @@ type UpdateNoteData = {
 	categoryId?: string;
 }
 
-
 export default function NoteEdit() {
 	const [title, setTitle] = useState<string | null>(null)
 	const [content, setContent] = useState<string>("")
-	const [note, setNote] = useState<NoteType | null>(null)
-	const [categories, setCategories] = useState<CategoryType[]>([])
 	const [categorySelected, setCategorySelected] = useState<CategoryType | null>(null)
+
+	const defaultTitle = "Sem título"
 
 	const [newCategoryName, setNewCategoryName] = useState("")
 
-	const [isLoading, setIsLoading] = useState(true)
 	const [isShowCategoryList, setIsShowCategoryList] = useState(false)
 	const [isEditingCategory, setIsEditingCategory] = useState(false)
 
 	const { user } = useAuth()
 	const { id } = useParams()
 	const navigate = useNavigate()
+	const queryClient = useQueryClient()
 
 	async function updateNote({ title, content, categoryId }: UpdateNoteData) {
 		try {
@@ -52,10 +52,20 @@ export default function NoteEdit() {
 		}
 	}
 
+	const { mutateAsync: createCategory } = useMutation({
+		mutationKey: ["create-category"],
+		mutationFn: async () => {
+			const { data } = await api.post<CategoryType>(`/create-category/${user?.id}`, { name: newCategoryName })
+			return data
+		}
+	})
+
 	async function handleCreateCategory() {
 		try {
-			const { data } = await api.post<CategoryType>(`/create-category/${user?.id}`, { name: newCategoryName })
-			setCategories([...categories, data])
+			const category = await createCategory()
+			queryClient.setQueryData<CategoryType[]>(["categories"], (oldData) => {
+				return oldData ? [...oldData, category] : [category]
+			});
 			setNewCategoryName("")
 		} catch (error) {
 			console.log(error)
@@ -65,11 +75,12 @@ export default function NoteEdit() {
 	async function handleDeleteCategory(categoryId: string) {
 		try {
 			await api.delete(`/delete-category/${categoryId}`)
+			queryClient.setQueryData<CategoryType[]>(["categories"], (oldData) => {
+				return oldData?.filter(category => category.id !== categoryId)
+			});
 			if (categorySelected?.id === categoryId) {
 				setCategorySelected(null)
 			}
-			const newCategories = categories.filter(category => category.id !== categoryId)
-			setCategories(newCategories)
 		} catch (error) {
 			console.log(error)
 		}
@@ -97,30 +108,30 @@ export default function NoteEdit() {
 
 	function handleBlur(e: React.FocusEvent<HTMLInputElement>) {
 		if (e.target.value === "") {
-			setTitle("Sem título")
+			setTitle(defaultTitle)
+			updateNote({ title: defaultTitle })
 		}
 	}
 
-	useEffect(() => {
-		const loadData = async () => {
-			try {
-				const { data: note } = await api.get<NoteType>(`/get-note/${id}`)
-				setNote(note)
-				setTitle(note.title)
-				setContent(note.content)
-				setCategorySelected(note.category)
-
-				const { data: categories } = await api.get<CategoryType[]>(`/get-categories/${user?.id}`)
-				setCategories(categories)
-
-				setIsLoading(false)
-			} catch (error) {
-				console.log(error)
-				setIsLoading(false)
-			}
+	const { data: note, isLoading } = useQuery({
+		queryKey: ["note"],
+		queryFn: async () => {
+			const { data } = await api.get<NoteType>(`/get-note/${id}`)
+			setContent(data.content)
+			setTitle(data.title)
+			setCategorySelected(data.category)
+			return data
 		}
-		loadData()
-	}, [id, user])
+	})
+
+	const {
+		data: categories,
+	} = useQuery({
+		queryKey: ["categories"], queryFn: async () => {
+			const { data: categories } = await api.get<CategoryType[]>(`/get-categories/${user?.id}`);
+			return categories;
+		}
+	})
 
 	return (
 		<div className="note-edit-container">
@@ -130,11 +141,13 @@ export default function NoteEdit() {
 				<main>
 					<form>
 						<input
+							id="title-note-input"
+							name="title-note-input"
 							// biome-ignore lint/a11y/noAutofocus: <explanation>
 							autoFocus
 							className="title-note-input"
 							type="text"
-							value={title === null ? "Sem título" : title}
+							value={title === null ? defaultTitle : title}
 							onChange={(e) => {
 								setTitle(e.target.value)
 								updateNote({ title: e.target.value })
@@ -192,8 +205,8 @@ export default function NoteEdit() {
 										</div>
 										<span className="text-header-category-container">categorias</span>
 										<ul>
-											{categories.length === 0 ? <span>Nenhuma categoria cadastrada</span>
-												: categories.map((category) => (
+											{categories?.length === 0 ? <span>Nenhuma categoria cadastrada</span>
+												: categories?.map((category) => (
 													<li key={category.id}>
 														{isEditingCategory ?
 															<input

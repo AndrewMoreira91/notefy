@@ -117,6 +117,9 @@
 	}
 	.header-start-part {
 		width: 100%;
+		flex-direction: column;
+		gap: 12px;
+		align-items: flex-start;
 	}
 	.header-start-part .input-container {
 		display: none;

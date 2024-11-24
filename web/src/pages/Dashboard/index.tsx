@@ -8,17 +8,12 @@ import type { CategoryType, NoteType } from "src/types/DatasTypes";
 import { useState } from "react";
 import api from "../../services/api";
 import { useAuth } from "../../contexts/auth.context";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "../../components/Loading";
 import DotsLoading from "../../components/DotsLoading";
 
 export const Dashboard = () => {
-  const [search, setSearch] = useState<string>("");
-
   const [categoriesSelected, setCategoriesSelected] = useState<string[]>([]);
-
-  const [noteList, setNoteList] = useState<NoteType[]>([]);
-  const [listSearch, setListSearch] = useState<NoteType[]>([]);
 
   const location = window.location.pathname;
   if (location !== "/") {
@@ -27,10 +22,23 @@ export const Dashboard = () => {
 
   const { user } = useAuth();
 
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: deleteNote } = useMutation({
+    mutationKey: ["delete-note"],
+    mutationFn: async (id: string) => {
+      await api.delete(`/delete-note/${id}`);
+    }
+  });
+
   async function handleDeleteCard(id: string) {
     try {
-      await api.delete(`/delete-note/${id}`);
-      setNoteList(revState => revState.filter(item => item.id !== id));
+      await deleteNote(id);
+
+      queryClient.setQueryData<NoteType[]>(["notes"], (oldData) => {
+        return oldData?.filter(note => note.id !== id);
+      });
+
     } catch (error) {
       console.error(error);
     }
@@ -45,30 +53,9 @@ export const Dashboard = () => {
     });
   }
 
-
-  function handleSearch(search: string) {
-    setSearch(search);
-    noteList.filter(note => {
-      listSearch.filter(item => item.id !== note.id);
-
-      if (note.title.toLowerCase().includes(search.toLowerCase())) {
-        setListSearch([...listSearch, note]);
-      }
-
-      if (note.content.toLowerCase().includes(search.toLowerCase())) {
-        setListSearch([...listSearch, note]);
-      }
-
-      if (note.category?.name.toLowerCase().includes(search.toLowerCase())) {
-        setListSearch([...listSearch, note]);
-      }
-    })
-  }
-
   const { data: notes, isError, isLoading } = useQuery({
     queryKey: ["notes"], queryFn: async () => {
       const { data: notes } = await api.get<NoteType[]>(`/get-notes/${user?.id}`);
-      setNoteList(notes);
       return notes;
     }
   })
@@ -87,8 +74,6 @@ export const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <Header
-        value={search}
-        onChange={e => handleSearch(e.target.value)}
         isShowBtnBack={false}
       />
       <main>
@@ -126,7 +111,7 @@ export const Dashboard = () => {
         {isError && <h3>Erro ao carregar as notas, tente recarregar a página</h3>}
         <div className="container-cads">
           {notes && notes.length === 0 ? <h3>Você não tem nenhuma nota :(</h3>
-            : (search === "" ? noteList : listSearch)?.map(note => {
+            : notes?.map(note => {
               if (categoriesSelected.length > 0 && !categoriesSelected.includes(note.category?.id)) {
                 return null;
               }
