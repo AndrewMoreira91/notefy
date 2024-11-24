@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { BiEdit, BiSolidCategory } from "react-icons/bi";
 import { BsFillClockFill } from "react-icons/bs";
 import { PiPlus } from "react-icons/pi";
+import { Editor } from "primereact/editor";
 
 import type { CategoryType, NoteType } from "../../types/DatasTypes";
 import api from "../../services/api";
@@ -20,7 +21,6 @@ type UpdateNoteData = {
 	categoryId?: string;
 }
 
-import { Editor } from "primereact/editor";
 
 export default function NoteEdit() {
 	const [title, setTitle] = useState<string | null>(null)

@@ -3,7 +3,7 @@ import { HiDotsVertical } from "react-icons/hi";
 import { FaEraser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
-import ReactHtmlParser from "react-html-parser"
+import HtmlToReactParser from "html-react-parser"
 
 type CardProps = {
 	title: string;
@@ -21,7 +21,7 @@ export default function Card({
 	onDeleteClick
 }: CardProps) {
 
-	const contentParsed = ReactHtmlParser(content)
+	const contentParsed = HtmlToReactParser(content)
 
 	return (
 		<div className="card">
