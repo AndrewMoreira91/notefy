@@ -195,6 +195,7 @@ export default function NoteEdit() {
 												placeholder="Adicionar categoria"
 												value={newCategoryName}
 												onChange={(e) => setNewCategoryName(e.target.value)}
+												onKeyDown={(e) => e.key === "Enter" && handleCreateCategory()}
 											/>
 											<button
 												type="button"

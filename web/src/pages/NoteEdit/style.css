@@ -130,6 +130,11 @@
 	width: 100%;
 }
 
+.container-category-list ul span {
+	padding: 4px 8px;
+	font-size: 0.8rem;
+}
+
 .container-category-list ul li {
 	display: flex;
 	align-items: center;
