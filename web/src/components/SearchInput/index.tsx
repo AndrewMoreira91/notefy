@@ -38,7 +38,9 @@ export default function SearchInput({ ...rest }: SearchInputProps) {
 							(
 								note.title.toLowerCase().trim().includes(searchValue) ||
 								note.content.toLowerCase().trim().includes(searchValue) ||
-								note.category.name.toLowerCase().trim().includes(searchValue)
+								(note.category && 
+								 note.category.name.toLowerCase().trim().includes(searchValue)
+								)
 							)
 						) {
 							return (
