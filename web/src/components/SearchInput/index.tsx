@@ -28,19 +28,18 @@ export default function SearchInput({ ...rest }: SearchInputProps) {
 				type="text"
 				placeholder="Pesquisar..."
 				value={searchValue}
-				onChange={(e) => setSearchValue(e.target.value.toLocaleLowerCase().trim())}
+				onChange={(e) => setSearchValue(e.target.value)}
 			/>
 
 			<div className="dropdown-search-input">
 				<ul>
 					{notesList?.map((note) => {
+						const value = searchValue.toLowerCase().trim();
 						if (searchValue &&
 							(
-								note.title.toLowerCase().trim().includes(searchValue) ||
-								note.content.toLowerCase().trim().includes(searchValue) ||
-								(note.category && 
-								 note.category.name.toLowerCase().trim().includes(searchValue)
-								)
+								note.title.toLowerCase().trim().includes(value) ||
+								note.content.toLowerCase().trim().includes(value) ||
+								note.category?.name.toLowerCase().trim().includes(value)
 							)
 						) {
 							return (
