@@ -2,23 +2,23 @@ import "./style.css";
 import { type InputHTMLAttributes, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DotLoader } from "react-spinners"
-import { FaArrowLeft, FaSearch } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 
 import api from "../../services/api";
 import { useAuth } from "../../contexts/auth.context";
 import type { NoteType } from "../../types/DatasTypes";
 
-import Input from "../Input";
 import Button from "../Button";
 import { BiUser } from "react-icons/bi";
+import SearchInput from "../SearchInput";
 
 type HeaderProps = InputHTMLAttributes<HTMLInputElement> & {
 	isShowBtnBack?: boolean;
 	onBack?: () => void;
 }
 
-export default function Header({ isShowBtnBack = true, onBack, ...rest }: HeaderProps) {
+export default function Header({ isShowBtnBack = true, onBack }: HeaderProps) {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const navigate = useNavigate();
@@ -50,14 +50,7 @@ export default function Header({ isShowBtnBack = true, onBack, ...rest }: Header
 					</button>
 				)}
 
-				<Input
-					{...rest}
-					icon={<FaSearch size={18} />}
-					style={{ marginLeft: isShowBtnBack ? 0 : "auto" }}
-					background="#3e3e3e"
-					width={"30%"}
-					placeholder="Pesquise notas, categorias..."
-				/>
+				<SearchInput />
 
 				<Button type="button" style={{ width: "auto" }} onClick={handleClickNewNote}>
 					{isLoading ? <DotLoader color="#a2b8ff" size={22} loading={isLoading} />
