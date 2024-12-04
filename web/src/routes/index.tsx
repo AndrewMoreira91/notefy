@@ -1,10 +1,21 @@
-import { useAuth } from "../contexts/auth.context"
-import AppRoute from "./app.route"
-import AuthRoute from "./auth.route"
+import { Route, Routes } from "react-router-dom"
+import { Dashboard } from "../pages/Dashboard"
+import { Login } from "../pages/Login"
+import NoteEdit from "../pages/NoteEdit"
+import { Register } from "../pages/Register"
+import PrivateRouter from "./privateRouter"
 
-import Loading from "../components/Loading"
+export default function AppRoutes() {
 
-export default function Routes() {
-  const {isLoading, isAuthenticated} = useAuth()
-  return isLoading ? <Loading /> : isAuthenticated ? <AppRoute /> : <AuthRoute />
+  return (
+    <Routes>
+      <Route path="/" element={<PrivateRouter />}>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/note/:id" element={<NoteEdit />} />
+      </Route>
+      <Route path="/login" element={<Login />} />/
+      <Route path="/register" element={<Register />} />
+      <Route path="*" element={<Dashboard />} />
+    </Routes>
+  )
 }

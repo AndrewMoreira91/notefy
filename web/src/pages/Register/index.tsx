@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import { useAuth } from "../../contexts/auth.context";
@@ -14,6 +14,10 @@ export const Register = () => {
 
   const { signUp, isLoading, erroMessage } = useAuth();
 
+  const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from || "/"
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -24,6 +28,7 @@ export const Register = () => {
     }
 
     await signUp(data);
+    navigate(from, { replace: true });
   };
 
   if (isLoading) {
