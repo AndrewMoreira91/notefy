@@ -18,7 +18,7 @@ type HeaderProps = InputHTMLAttributes<HTMLInputElement> & {
 	onBack?: () => void;
 }
 
-export default function Header({ isShowBtnBack = true, onBack, ...rest }: HeaderProps) {
+export default function Header({ isShowBtnBack = true, onBack }: HeaderProps) {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const navigate = useNavigate();
@@ -40,8 +40,6 @@ export default function Header({ isShowBtnBack = true, onBack, ...rest }: Header
 		}
 	}
 
-	const [searchValue, setSearchValue] = useState("");
-
 	return (
 		<header className="header-container">
 			<div className="header-start-part">
@@ -52,11 +50,7 @@ export default function Header({ isShowBtnBack = true, onBack, ...rest }: Header
 					</button>
 				)}
 
-				<SearchInput
-					{...rest}
-					value={searchValue}
-					onChange={(e) => setSearchValue(e.target.value)}
-				/>
+				<SearchInput />
 
 				<Button type="button" style={{ width: "auto" }} onClick={handleClickNewNote}>
 					{isLoading ? <DotLoader color="#a2b8ff" size={22} loading={isLoading} />

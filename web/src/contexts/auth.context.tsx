@@ -73,8 +73,10 @@ function AuthProvider({ children }: { children: ReactNode }) {
 					setUser(JSON.parse(storageUser));
 					api.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
 				}
+				setIsLoading(false);
 				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			} catch (error: any) {
+				setIsLoading(false);
 				console.error(error);
 				setIsError(true);
 			}

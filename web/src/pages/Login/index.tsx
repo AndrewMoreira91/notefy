@@ -1,5 +1,5 @@
 import "./style.css";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import Button from "../../components/Button";
@@ -13,15 +13,21 @@ export const Login = () => {
 
   const { signIn, isLoading, erroMessage, isAuthenticated } = useAuth()
 
+  const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from || "/"
+  
+  console.log(from)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const data = {
       email,
       password,
     }
-
+  
     await signIn(data);
+    navigate(from, { replace: true });
   };
 
   if (isLoading) {
