@@ -1,5 +1,5 @@
 import "./style.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useState } from "react";
 
 import Button from "../../components/Button";
@@ -11,7 +11,7 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signIn, isLoading, erroMessage } = useAuth()
+  const { signIn, isLoading, erroMessage, isAuthenticated } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,6 +26,10 @@ export const Login = () => {
 
   if (isLoading) {
     return <Loading />;
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/" />;
   }
 
   return (
